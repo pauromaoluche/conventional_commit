@@ -1,0 +1,6 @@
+[2025-06-14 19:37:20] feat: Commit utilizando padronizador | Primeiro commit utilizando o padronizador de commit e de versao (v1.0.0)
+Arquivos modificados:
+  - README.MD
+  - commit.sh
+  - commit_helper.py
+
