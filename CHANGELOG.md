@@ -1,4 +1,13 @@
-## v1.0.1 [2025-06-15 17:15:39]
+## v1.0.8 [2025-06-15 17:19:31]
+
+- **feat**: correcao
+
+Arquivos modificados:
+- `CHANGELOG.md`
+- `commit_helper.py`
+
+
+## v1.0.7 [2025-06-15 17:15:39]
 
 - **feat**: pegando versao do changelog
 

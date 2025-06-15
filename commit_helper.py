@@ -49,7 +49,7 @@ def read_current_version():
         return DEFAULT_VERSION
     with open(CHANGELOG_FILE, "r") as f:
         lines = f.readlines()
-        for line in reversed(lines):
+        for line in lines:
             match = re.search(r'v(\d+\.\d+\.\d+)', line)
             if match:
                 return match.group(1)
