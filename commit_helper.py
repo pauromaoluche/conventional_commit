@@ -74,7 +74,7 @@ def update_version_log(date, commit_type, message, additional, version, modified
             f.write("\n")
 
 def update_changelog(date, version, commit_type, message, additional, modified_files):
-    entry = f"## v{version} [{date}]\n **{commit_type}**: {message}"
+    entry = f"## v{version} [{date}]\n\n- **{commit_type}**: {message}"
     if additional:
         entry += f"\n- {additional}"
 

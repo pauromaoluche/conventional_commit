@@ -1,3 +1,13 @@
+## v1.0.6 [2025-06-15 17:12:46]
+
+- **feat**: teste
+- teste
+
+Arquivos modificados:
+- `commit_helper.py`
+- `install_commit_helper.sh`
+
+
 ## v1.0.6 [2025-06-15 17:11:44]
  **feat**: teste
 - teste
