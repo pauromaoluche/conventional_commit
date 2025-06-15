@@ -74,7 +74,7 @@ def update_version_log(date, commit_type, message, additional, version, modified
             f.write("\n")
 
 def update_changelog(date, version, commit_type, message, additional, modified_files):
-    entry = f"## v{version} [{date}]\n\n- **{commit_type}**: {message}"
+    entry = f"## v{version} [{date}]\n **{commit_type}**: {message}"
     if additional:
         entry += f"\n- {additional}"
 
@@ -112,7 +112,7 @@ def generate_commit_message():
     modified_files = get_modified_files()
 
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    update_version_log(date, commit_type, message, additional, new_version, modified_files)
+    #update_version_log(date, commit_type, message, additional, new_version, modified_files)
     update_changelog(date, new_version, commit_type, message, additional, modified_files)
     #create_git_tag(new_version)
 
