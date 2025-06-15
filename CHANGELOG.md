@@ -1,3 +1,11 @@
+## v1.0.1 [2025-06-15 17:15:39]
+
+- **feat**: pegando versao do changelog
+
+Arquivos modificados:
+- `commit_helper.py`
+
+
 ## v1.0.6 [2025-06-15 17:12:46]
 
 - **feat**: teste

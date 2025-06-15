@@ -45,9 +45,9 @@ def get_user_input():
     return commit_type, message, additional, int(major), int(minor), int(patch)
 
 def read_current_version():
-    if not os.path.exists(VERSION_LOG_FILE):
+    if not os.path.exists(CHANGELOG_FILE):
         return DEFAULT_VERSION
-    with open(VERSION_LOG_FILE, "r") as f:
+    with open(CHANGELOG_FILE, "r") as f:
         lines = f.readlines()
         for line in reversed(lines):
             match = re.search(r'v(\d+\.\d+\.\d+)', line)
