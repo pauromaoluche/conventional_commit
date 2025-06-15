@@ -1,3 +1,14 @@
+## v1.0.4 [2025-06-15 17:05:11]
+
+- **docs**: Ajuste na doc
+- deixando changelog mais amigavel
+
+Arquivos modificados:
+- `commit_helper.py`
+- `install_commit_helper.sh`
+- `versionLog`
+
+
 ## v1.0.2
 
 - **docs**: Readme.md - _Atualizando as informações do readme.md_

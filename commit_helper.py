@@ -73,10 +73,10 @@ def update_version_log(date, commit_type, message, additional, version, modified
                 f.write(f"  - {file}\n")
             f.write("\n")
 
-def update_changelog(version, commit_type, message, additional, modified_files):
-    entry = f"## v{version}\n\n- **{commit_type}**: {message}"
+def update_changelog(date, version, commit_type, message, additional, modified_files):
+    entry = f"## v{version} [{date}]\n\n- **{commit_type}**: {message}"
     if additional:
-        entry += f" - _{additional}_"
+        entry += f"\n- {additional}"
 
     if modified_files:
         entry += f"\n\nArquivos modificados:\n"
@@ -113,7 +113,7 @@ def generate_commit_message():
 
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     update_version_log(date, commit_type, message, additional, new_version, modified_files)
-    update_changelog(new_version, commit_type, message, additional, modified_files)
+    update_changelog(date, new_version, commit_type, message, additional, modified_files)
     create_git_tag(new_version)
 
     subprocess.run(["git", "add", VERSION_LOG_FILE, CHANGELOG_FILE], check=True)

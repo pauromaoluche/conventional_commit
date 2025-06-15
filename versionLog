@@ -13,3 +13,14 @@ Arquivos modificados:
 Arquivos modificados:
   - README.MD
 
+[2025-06-15 17:04:30] docs: Ajustando doc | Deixando changelog mais amigavel (v1.0.3)
+Arquivos modificados:
+  - commit_helper.py
+  - install_commit_helper.sh
+
+[2025-06-15 17:05:11] docs: Ajuste na doc | deixando changelog mais amigavel (v1.0.4)
+Arquivos modificados:
+  - commit_helper.py
+  - install_commit_helper.sh
+  - versionLog
+
