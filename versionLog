@@ -24,3 +24,8 @@ Arquivos modificados:
   - install_commit_helper.sh
   - versionLog
 
+[2025-06-15 17:08:13] fix: comentando temporariamente criacao de tag | Comentando enquanto não esta pronto a criacao de tag no git pelo script (v1.0.5)
+Arquivos modificados:
+  - commit_helper.py
+  - install_commit_helper.sh
+

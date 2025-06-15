@@ -126,7 +126,7 @@ def generate_commit_message():
     date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     update_version_log(date, commit_type, message, additional, new_version, modified_files)
     update_changelog(date, new_version, commit_type, message, additional, modified_files)
-    create_git_tag(new_version)
+    #create_git_tag(new_version)
 
     subprocess.run(["git", "add", VERSION_LOG_FILE, CHANGELOG_FILE], check=True)
 

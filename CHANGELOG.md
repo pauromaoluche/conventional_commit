@@ -1,3 +1,13 @@
+## v1.0.5 [2025-06-15 17:08:13]
+
+- **fix**: comentando temporariamente criacao de tag
+- Comentando enquanto não esta pronto a criacao de tag no git pelo script
+
+Arquivos modificados:
+- `commit_helper.py`
+- `install_commit_helper.sh`
+
+
 ## v1.0.4 [2025-06-15 17:05:11]
 
 - **docs**: Ajuste na doc
