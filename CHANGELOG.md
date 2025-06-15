@@ -1,3 +1,12 @@
+## v1.1.0 [2025-06-15 17:26:48]
+
+- **feat**: Adicionando gitignore
+
+Arquivos modificados:
+- `.gitignore`
+- `install_commit_helper.sh`
+
+
 ## v1.0.8 [2025-06-15 17:19:31]
 
 - **feat**: correcao

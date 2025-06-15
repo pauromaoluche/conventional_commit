@@ -57,11 +57,11 @@ def get_user_input():
     return commit_type, message, additional, int(major), int(minor), int(patch)
 
 def read_current_version():
-    if not os.path.exists(VERSION_LOG_FILE):
+    if not os.path.exists(CHANGELOG_FILE):
         return DEFAULT_VERSION
-    with open(VERSION_LOG_FILE, "r") as f:
+    with open(CHANGELOG_FILE, "r") as f:
         lines = f.readlines()
-        for line in reversed(lines):
+        for line in lines:
             match = re.search(r'v(\d+\.\d+\.\d+)', line)
             if match:
                 return match.group(1)
@@ -171,6 +171,28 @@ EOF
 chmod +x "$COMMIT_SH"
 
 echo "✅ commit_helper.py e commit.sh criados com sucesso!"
+
+# Adicionar arquivos ao .gitignore
+GITIGNORE_FILE="$SCRIPT_DIR/.gitignore"
+IGNORE_ENTRIES=("install_commit_helper.sh" "commit.sh")
+
+if [ -f "$GITIGNORE_FILE" ]; then
+    echo "📝 .gitignore já existe. Verificando entradas..."
+    for entry in "${IGNORE_ENTRIES[@]}"; do
+        if ! grep -qxF "$entry" "$GITIGNORE_FILE"; then
+            echo "$entry" >> "$GITIGNORE_FILE"
+            echo "➕ Adicionado '$entry' ao .gitignore"
+        else
+            echo "✔️ '$entry' já está no .gitignore"
+        fi
+    done
+else
+    echo "📄 Criando .gitignore..."
+    for entry in "${IGNORE_ENTRIES[@]}"; do
+        echo "$entry" >> "$GITIGNORE_FILE"
+        echo "➕ Adicionado '$entry' ao novo .gitignore"
+    done
+fi
 
 # Mensagem final
 echo ""
