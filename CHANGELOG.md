@@ -1,3 +1,11 @@
+## v1.0.2
+
+- **docs**: Readme.md - _Atualizando as informações do readme.md_
+
+Arquivos modificados:
+- `README.MD`
+
+
 ## v1.0.1
 
 - **refactor**: Adicionando informacoes ao sh - _Deixando mais amigavel as mensagens no terminal_
