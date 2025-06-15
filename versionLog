@@ -4,3 +4,8 @@ Arquivos modificados:
   - commit.sh
   - commit_helper.py
 
+[2025-06-14 23:53:46] refactor: Adicionando informacoes ao sh | Deixando mais amigavel as mensagens no terminal (v1.0.1)
+Arquivos modificados:
+  - commit_helper.py
+  - install_commit_helper.sh
+

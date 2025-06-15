@@ -1,3 +1,12 @@
+## v1.0.1
+
+- **refactor**: Adicionando informacoes ao sh - _Deixando mais amigavel as mensagens no terminal_
+
+Arquivos modificados:
+- `commit_helper.py`
+- `install_commit_helper.sh`
+
+
 # Changelog
 
 ## v1.0.0

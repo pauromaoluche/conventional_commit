@@ -16,21 +16,29 @@ TYPES = {
     "refactor": "Refatoração sem alteração de funcionalidade"
 }
 
+MAJORMINORPATCH = {
+    "major": "(1).0.0 - Mudança incompatível, que quebra retrocompatibilidade.",
+    "minor": "1.(1).0 - Nova funcionalidade, mantendo compatibilidade.",
+    "patch": "1.1.(1) - Correção de bug, pequena melhoria."
+}
+
 def get_user_input():
-    print("Selecione o tipo do commit:")
+    print("\nSelecione o tipo do commit:")
     for key, desc in TYPES.items():
         print(f"{key} - {desc}")
-    commit_type = input("Type: ").strip()
+    commit_type = input("\nType: ").strip()
 
     if commit_type not in TYPES:
         print("Tipo inválido!")
         sys.exit(1)
 
-    message = input("Mensagem do commit: ").strip()
+    message = input("\nMensagem do commit: ").strip()
     additional = input("Informações adicionais (opcional): ").strip()
 
-    print("Informe a mudança de versão:")
-    major = input("MAJOR (0 se não mudou): ").strip() or "0"
+    print("\nInforme a mudança de versão:")
+    for key, desc in MAJORMINORPATCH.items():
+        print(f"{key} - {desc}")
+    major = input("\nMAJOR (0 se não mudou): ").strip() or "0"
     minor = input("MINOR (0 se não mudou): ").strip() or "0"
     patch = input("PATCH (0 se não mudou): ").strip() or "0"
 
