@@ -128,7 +128,7 @@ def generate_commit_message():
     update_changelog(date, new_version, commit_type, message, additional, modified_files)
     #create_git_tag(new_version)
 
-    subprocess.run(["git", "add", VERSION_LOG_FILE, CHANGELOG_FILE], check=True)
+    subprocess.run(["git", "add", CHANGELOG_FILE], check=True)
 
     commit_msg = f"{commit_type}: {message}\n\n{additional}\n\nv{new_version}\n\n{modified_files}"
     return commit_msg
@@ -174,7 +174,7 @@ echo "✅ commit_helper.py e commit.sh criados com sucesso!"
 
 # Adicionar arquivos ao .gitignore
 GITIGNORE_FILE="$SCRIPT_DIR/.gitignore"
-IGNORE_ENTRIES=("install_commit_helper.sh" "commit.sh")
+IGNORE_ENTRIES=("install_commit_helper.sh" "commit.sh" "commit_helper.py")
 
 if [ -f "$GITIGNORE_FILE" ]; then
     echo "📝 .gitignore já existe. Verificando entradas..."
