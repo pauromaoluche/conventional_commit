@@ -5,11 +5,12 @@ echo "🔧 Instalando Commit Helper..."
 # Caminhos
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 COMMIT_HELPER_PY="$SCRIPT_DIR/commit_helper.py"
+ISSUE_HELPER_PY="$SCRIPT_DIR/issue_helper.py"
+ISSUE_SH="$SCRIPT_DIR/issue.sh"
 COMMIT_SH="$SCRIPT_DIR/commit.sh"
-GIT_HOOK="$SCRIPT_DIR/.git/hooks/prepare-commit-msg"
 GITIGNORE_FILE="$SCRIPT_DIR/.gitignore"
 
-# Cria o script Python de commit automático
+# Cria commit_helper.py
 cat << 'EOF' > "$COMMIT_HELPER_PY"
 import os
 import subprocess
@@ -33,8 +34,8 @@ TYPES = {
 
 def get_version_bump(commit_type):
     if commit_type == "feat":
-        return (0, 1, 0)  # MINOR
-    return (0, 0, 1)      # PATCH para todos os outros
+        return (0, 1, 0)
+    return (0, 0, 1)
 
 def get_user_input():
     print("\nSelecione o tipo do commit:")
@@ -96,6 +97,11 @@ def create_git_tag(version):
     except subprocess.CalledProcessError:
         print("⚠️ Sem commits anteriores. Tag ignorada.")
 
+def get_issue_number_from_branch():
+    branch = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True).stdout.strip()
+    match = re.search(r'-(\d+)$', branch)
+    return match.group(1) if match else None
+
 def generate_commit_message():
     commit_type, message, additional = get_user_input()
     current_version = read_current_version()
@@ -108,7 +114,13 @@ def generate_commit_message():
     create_git_tag(new_version)
     subprocess.run(["git", "add", CHANGELOG_FILE], check=True)
 
-    return f"{commit_type}: {message}\n\n{additional}\n\nv{new_version}\n\nArquivos:\n" + "\n".join(modified_files)
+    footer = ""
+    issue_number = get_issue_number_from_branch()
+    if issue_number:
+        footer = f"\n\nCloses #{issue_number}"
+
+    return f"{commit_type}: {message}\n\n{additional}\n\nv{new_version}\n\nArquivos:\n" + \
+        "\n".join(modified_files) + footer
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--generate-message":
@@ -121,17 +133,84 @@ def main():
             print("❌ Entrada de usuário cancelada.")
             sys.exit(1)
     else:
-        print("Use: python3 commit_helper.py --generate-message")
+        print("Use: python commit_helper.py --generate-message")
 
 if __name__ == "__main__":
     main()
 EOF
 
-# Cria o script de commit
+# Cria issue_helper.py
+cat << 'EOF' > "$ISSUE_HELPER_PY"
+import requests
+import os
+import subprocess
+import re
+
+GITHUB_TOKEN = os.getenv("GH_TOKEN") or "SEU_TOKEN_AQUI"
+REPO_OWNER = "seu-usuario-ou-org"
+REPO_NAME = "seu-repo"
+API_URL = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/issues"
+
+def slugify(text):
+    return re.sub(r'[^\w\-]+', '-', text.lower().strip()).strip('-')
+
+def criar_issue():
+    print("📋 Criar nova issue para tarefa")
+    titulo = input("Título da tarefa: ").strip()
+    tipo = input("Tipo (feat, fix, chore, improvement...): ").strip()
+    prioridade = input("Prioridade (Alta, Média, Baixa): ").strip()
+    descricao = input("Descrição breve: ").strip()
+
+    body = f"""### Tipo de tarefa
+{tipo}
+
+### Prioridade
+{prioridade}
+
+### Descrição
+{descricao}
+
+### Etapas ou critérios de aceitação
+- [ ] Implementar
+- [ ] Testar
+- [ ] Commitar
+"""
+
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json"
+    }
+
+    data = {
+        "title": titulo,
+        "body": body,
+        "labels": ["tarefa"]
+    }
+
+    response = requests.post(API_URL, headers=headers, json=data)
+
+    if response.status_code == 201:
+        issue = response.json()
+        issue_number = issue["number"]
+        print(f"✅ Issue criada com sucesso: #{issue_number} - {titulo}")
+
+        nome_branch = f"{tipo}/{slugify(titulo)}-{issue_number}"
+        subprocess.run(["git", "checkout", "development"])
+        subprocess.run(["git", "pull"])
+        subprocess.run(["git", "checkout", "-b", nome_branch])
+        print(f"🌿 Branch criada: {nome_branch}")
+    else:
+        print("❌ Erro ao criar issue:", response.status_code, response.text)
+
+if __name__ == "__main__":
+    criar_issue()
+EOF
+
+# Cria commit.sh
 cat << 'EOF' > "$COMMIT_SH"
 #!/bin/bash
 echo "🔧 Executando commit helper..."
-python3 commit_helper.py --generate-message
+python commit_helper.py --generate-message
 if [ $? -ne 0 ]; then
     echo "❌ Erro ao gerar mensagem."
     exit 1
@@ -141,8 +220,17 @@ EOF
 
 chmod +x "$COMMIT_SH"
 
-# Atualiza o .gitignore
-IGNORE_ENTRIES=("install_commit_helper.sh" "commit.sh" "commit_helper.py")
+# Cria issue.sh
+cat << 'EOF' > "$ISSUE_SH"
+#!/bin/bash
+echo "🔧 Executando issue helper..."
+python issue_helper.py
+EOF
+
+chmod +x "$ISSUE_SH"
+
+# Atualiza .gitignore
+IGNORE_ENTRIES=("install_commit_helper.sh" "commit.sh" "commit_helper.py" "issue_helper.py" "issue.sh")
 if [ -f "$GITIGNORE_FILE" ]; then
     echo "📝 Atualizando .gitignore..."
     for entry in "${IGNORE_ENTRIES[@]}"; do
@@ -157,6 +245,8 @@ fi
 echo ""
 echo "✅ Commit Helper instalado com sucesso!"
 echo "🚀 Para usar:"
-echo "   ./commit.sh"
+echo "   1. Criar uma issue + branch: python issue_helper.py"
+echo "   2. Depois de alterar o código: git add ."
+echo "   3. Rodar commit: ./commit.sh"
 echo ""
-echo "📝 Isso criará changelog, tag e commit formatado automaticamente com versionamento baseado no tipo de commit."
+echo "📌 O commit será vinculado à issue (Closes #ID) automaticamente."

@@ -20,8 +20,8 @@ TYPES = {
 
 def get_version_bump(commit_type):
     if commit_type == "feat":
-        return (0, 1, 0)  # MINOR
-    return (0, 0, 1)      # PATCH para todos os outros
+        return (0, 1, 0)
+    return (0, 0, 1)
 
 def get_user_input():
     print("\nSelecione o tipo do commit:")
@@ -83,6 +83,11 @@ def create_git_tag(version):
     except subprocess.CalledProcessError:
         print("⚠️ Sem commits anteriores. Tag ignorada.")
 
+def get_issue_number_from_branch():
+    branch = subprocess.run(["git", "branch", "--show-current"], capture_output=True, text=True).stdout.strip()
+    match = re.search(r'-(\d+)$', branch)
+    return match.group(1) if match else None
+
 def generate_commit_message():
     commit_type, message, additional = get_user_input()
     current_version = read_current_version()
@@ -95,7 +100,13 @@ def generate_commit_message():
     create_git_tag(new_version)
     subprocess.run(["git", "add", CHANGELOG_FILE], check=True)
 
-    return f"{commit_type}: {message}\n\n{additional}\n\nv{new_version}\n\nArquivos:\n" + "\n".join(modified_files)
+    footer = ""
+    issue_number = get_issue_number_from_branch()
+    if issue_number:
+        footer = f"\n\nCloses #{issue_number}"
+
+    return f"{commit_type}: {message}\n\n{additional}\n\nv{new_version}\n\nArquivos:\n" + \
+        "\n".join(modified_files) + footer
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--generate-message":
